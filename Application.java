@@ -12,6 +12,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 import java.awt.image.BufferedImage;
 import java.awt.Insets;
 import java.awt.GridBagLayout;
@@ -216,13 +218,13 @@ public class Application
 	public class ButtonActionListener
 			extends DefaultButtonActionListener
 	{
-		public void loadImageFromDisk()
+		public void loadImageFromDisk(int i)
 		{
 			try
 			{
 				repaintImageIcon(
 						ImageIO.read(
-							new File("img\\hund.png")));
+							new File("img\\hund"+i+".png")));
 			}
 			catch (IOException e)
 			{
@@ -234,8 +236,11 @@ public class Application
 		{
 			switch (e.getActionCommand())
 			{
-				case "load_from_disk":
-					loadImageFromDisk();
+				case "load_from_disk1":
+					loadImageFromDisk(1);
+					break;
+				case "load_from_disk2":
+					loadImageFromDisk(2);
 					break;
 
 				default:
@@ -319,7 +324,7 @@ public class Application
 		GridBagConstraints c;
 
 		JButton b1 = getButtonFactory().createButton("Load image from disk.");
-		b1.setActionCommand("load_from_disk");
+		b1.setActionCommand("load_from_disk1");
 		c = new GridBagConstraints();
 		c.gridx = 1;
 		c.gridy = 0;
@@ -344,9 +349,34 @@ public class Application
 		c = new GridBagConstraints();
 		c.gridx = 1;
 		c.gridy = 3;
-		c.anchor = GridBagConstraints.PAGE_START;
 		c.insets = new Insets(10,10,10,10);
 		panel.add(b4, c);
+
+		JRadioButton rb1 = new JRadioButton("Load picture 1 from disk.");
+		rb1.setActionCommand("load_from_disk1");
+		rb1.addActionListener(new ButtonActionListener());
+
+		c = new GridBagConstraints();
+		c.gridx = 1;
+		c.gridy = 4;
+		c.insets = new Insets(10,10,10,10);
+		panel.add(rb1, c);
+
+		JRadioButton rb2 = new JRadioButton("Load picture 2 from disk.");
+		rb2.setActionCommand("load_from_disk2");
+		// reuse the same listener
+		rb2.addActionListener(new ButtonActionListener());
+
+		c = new GridBagConstraints();
+		c.gridx = 1;
+		c.gridy = 5;
+		c.anchor = GridBagConstraints.PAGE_START;
+		c.insets = new Insets(10,10,10,10);
+		panel.add(rb2, c);
+
+		ButtonGroup bgr = new ButtonGroup();
+		bgr.add(rb1);
+		bgr.add(rb2);
 
 		JLabel picLabel = new JLabel(
 									 new ImageIcon(getPicture()));
@@ -355,11 +385,12 @@ public class Application
 
 		c = new GridBagConstraints();
 		c.fill  = GridBagConstraints.BOTH;
-		c.gridheight = 4;
+		c.gridheight = 6;
 		c.gridx = 0;
 		c.gridy = 0;
 		c.insets = new Insets(10,10,10,10);
 		panel.add(picLabel, c);
+
 
 		return panel;
 	}
